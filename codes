@@ -100,3 +100,79 @@ contract Contract {
         require(sent, "Failed to send Ether to owner");
     }
 }
+
+
+
+//Contract Account
+Within contracts, the this keyword can explicitly converted to an address:
+Charity Donation
+Let's take all funds that were passed to the receive function and donate them to charity. We'll do this in two steps.
+First, modify the constructor to accept a new argument: the charity address.
+Next, add a new function called donate. When this function is called transfer all remaining funds in the contract to the charity address.
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Contract {
+    // State variables
+    address public owner;
+    address public charity;
+
+    // Constructor sets the deployer as the owner and accepts a charity address
+    constructor(address _charity) {
+        owner = msg.sender;
+        charity = _charity;
+    }
+
+    // Function to receive Ether without calldata
+    receive() external payable {}
+
+    // Payable function that sends received Ether to the owner
+    function tip() public payable {
+        require(msg.value > 0, "No Ether sent");
+
+        (bool sent, ) = owner.call{value: msg.value}("");
+        require(sent, "Failed to send Ether to owner");
+    }
+
+    // Function to donate all contract funds to the charity
+    function donate() external {
+        require(address(this).balance > 0, "No funds to donate");
+
+        (bool sent, ) = charity.call{value: address(this).balance}("");
+        require(sent, "Donation failed");
+    }
+}
+
+//Self Destruct
+//When the donate function is called, trigger a selfdestruct in the contract!
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Contract {
+    // State variables
+    address public owner;
+    address public charity;
+
+    // Constructor sets the deployer as the owner and accepts a charity address
+    constructor(address _charity) {
+        owner = msg.sender;
+        charity = _charity;
+    }
+
+    // Function to receive Ether without calldata
+    receive() external payable {}
+
+    // Payable function that sends received Ether to the owner
+    function tip() public payable {
+        require(msg.value > 0, "No Ether sent");
+
+        (bool sent, ) = owner.call{value: msg.value}("");
+        require(sent, "Failed to send Ether to owner");
+    }
+
+    // Function to donate all contract funds to the charity and self-destruct the contract
+    function donate() external {
+        selfdestruct(payable(charity));
+    }
+}
+
