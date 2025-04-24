@@ -1,14 +1,12 @@
 Unsigned Integers
 What the heck is an unsigned integer? 
 
-First, let's go over integers. Integers include all positive and negative numbers without fractions. The numbers -2,-1,0,1,2 are all integers. This range continues in both the positive and negative direction as far as you can count!
-
+First, let's go over integers. Integers include all positive and negative numbers without fractions. The numbers -2,-1,0,1,2 are all 
+integers. This range continues in both the positive and negative direction as far as you can count!
 To determine if the number is above or below zero we use the sign: + or -. An unsigned integer is an integer that has no sign. 
-
-Solidity has a specific data type for unsigned integers called uint. A uint can be suffixed with the number of bits reserved for it. For instance uint8 means that there are eight bits provided for the value of the variable.
-
-What is the range of unsigned integers in eight bits? 
-
-Eight bits can range from 00000000 to 11111111. This range can represent 256 unique values.
-
-Since the range of unsigned integer values does not include negative numbers, it is simply 0 to 255. In decimal, the unsigned value of 00000000 is 0 and the value of 11111111 is 255. So, the max value a uint8 can store is 255. You can calculate the max value of a uint by doing (2 ^ n) - 1, where n is the number of bits it can use to store the value.
+Solidity has a specific data type for unsigned integers called uint. A uint can be suffixed with the number of bits reserved for it.
+For instance uint8 means that there are eight bits provided for the value of the variable.
+What is the range of unsigned integers in eight bits? Eight bits can range from 00000000 to 11111111. This range can represent 256 unique values.
+Since the range of unsigned integer values does not include negative numbers, it is simply 0 to 255. In decimal, the unsigned value of
+00000000 is 0 and the value of 11111111 is 255. So, the max value a uint8 can store is 255. You can calculate the max value of a uint by 
+doing (2 ^ n) - 1, where n is the number of bits it can use to store the value.
