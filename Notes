@@ -33,3 +33,7 @@ a payable function. This is another keyword which affects the function's mutabil
 
 Transferring Funds
 We can make any regular function payable. This allows us to differentiate the purpose of the ether coming into the smart contract.
+
+Self Destruct
+Contracts can destroy themselves by using the SELFDESTRUCT opcode on the EVM! This opcode actually refunds ether in order to incentivize 
+cleaning up the blockchain of unused contracts.
