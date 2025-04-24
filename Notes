@@ -10,3 +10,13 @@ What is the range of unsigned integers in eight bits? Eight bits can range from 
 Since the range of unsigned integer values does not include negative numbers, it is simply 0 to 255. In decimal, the unsigned value of
 00000000 is 0 and the value of 11111111 is 255. So, the max value a uint8 can store is 255. You can calculate the max value of a uint by 
 doing (2 ^ n) - 1, where n is the number of bits it can use to store the value.
+
+Accounts 
+In Ethereum, accounts are often distinguished into two types: Externally Owned Accounts and Contract Accounts. The differences between these
+accounts is largely conceptual as the EVM essentially treats them the same!Every account on the EVM has a public address and a balance. 
+Contract accounts will also store their bytecode as well as their internal storage data.When making a call from an EOA to a Contract Account
+it's important to know things like who is making the call, how much ether they are sending and the function they are intending to invoke 
+with which arguments.The Solidity language handles the wiring up of the transaction data to the function we have defined on the contract. 
+The language also gives us access to the transaction parameters through globals like msg.sender and msg.value.By providing these utilities 
+for working with accounts we can easily define roles, permissions and track token balances in contracts. Let's learn all about working with 
+accounts in Solidity!
