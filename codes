@@ -1,4 +1,4 @@
-//Storage Variables
+//Storage Variables Add two boolean variables
 
 // SPDX-License-Identifier: MIT
 Add two boolean variables
@@ -28,6 +28,9 @@ contract Contract {
    uint256 public sum = a+b;
 
 }
+
+//Create Signed Integers!
+
 //Returning Values
 //Create an external view function add which takes a uint parameter and returns the sum of the parameter plus the state variable x.
 contract Contract {
@@ -49,6 +52,30 @@ contract Contract {
     }
 
 }
+
+//String Literals
+// Public bytes32 storage variable to store the "Hello World" message
+    bytes32 public msg1 = "Hello World"; // This fits within 32 bytes
+
+    // Public string storage variable to store a longer message
+    string public msg2 = "Hello World, welcome to the world of Solidity!"; // Longer than 32 bytes
+
+//Enum Type
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Contract {
+    // Enum declaration
+    enum Foods { Apple, Pizza, Bagel, Banana }
+
+    // Storing enum values in variables
+    Foods public food1 = Foods.Apple;   // Apple corresponds to 0
+    Foods public food2 = Foods.Pizza;   // Pizza corresponds to 1
+    Foods public food3 = Foods.Bagel;   // Bagel corresponds to 2
+    Foods public food4 = Foods.Banana;  // Banana corresponds to 3
+}
+
+
 //Using Console.log
 When developing smart contracts, Foundry makes it super easy to write Solidity unit tests, among many other features. 
 We are using foundry for code execution in this very code lesson! For that reason, you can make use of the console library, 
