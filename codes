@@ -62,3 +62,17 @@ contract C {
     }
   }
 }
+//Store the Owner
+Create a public address state variable called owner on the contract
+Next create a constructor function which will store the msg.sender in owner
+pragma solidity ^0.8.20;
+
+contract Contract {
+    // Public address state variable to store the owner's address
+    address public owner;
+
+    // Constructor sets the deployer of the contract as the owner
+    constructor() {
+         owner = msg.sender;
+}
+}
