@@ -76,3 +76,27 @@ contract Contract {
          owner = msg.sender;
 }
 }
+
+//Transfer Tips
+Create a public payable function tip which sends any of its received ether to the owner.
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Contract {
+    // Public address state variable to store the owner's address
+    address public owner;
+
+    // Constructor sets the deployer of the contract as the owner
+    constructor() {
+         owner = msg.sender;
+}
+ // Function to receive Ether without calldata
+    receive() external payable {}
+    // Payable function that sends received Ether to the owner
+    function tip() public payable {
+        require(msg.value > 0, "No Ether sent");
+
+        (bool sent, ) = owner.call{value: msg.value}("");
+        require(sent, "Failed to send Ether to owner");
+    }
+}
