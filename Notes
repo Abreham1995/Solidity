@@ -30,3 +30,6 @@ address a = 0xc783df8a850f42e7f7e57013759c285caa701eb6;
 Receive Function
 In the latest versions of Solidity, contracts cannot receive ether by default.In order to receive ether, a contract must specify
 a payable function. This is another keyword which affects the function's mutability similar to view and pure.
+
+Transferring Funds
+We can make any regular function payable. This allows us to differentiate the purpose of the ether coming into the smart contract.
