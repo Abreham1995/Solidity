@@ -76,3 +76,165 @@ The easiest way to enable one contract to interact with another is by defining t
 1. // tokenAddress: a contract adddress we want to communicate with
 2. // userAddress: the address we want to lookup the balance for
 3. uint balance = IToken(tokenAddress).getBalance(userAddress);
+
+Behind the scenes Solidity is creating a message call that encodes the calldata for this getBalance call.
+
+What's an Escrow? 🤔
+An escrow is an agreement often used when transferring funds in exchange for a good or service. 
+Funds can be held in escrow and a third party can be chosen to "arbitrate" or approve the transfer when the service or good is provided.
+There are many use cases for Escrows across real estate, charities and marketplaces. It's the bread and butter of Ethereum Smart Contracts as it's quite easy to write, and yet, so powerful. 🍞🧈
+
+Let's Get Building 👷‍♂️👷‍♀️
+We hope that during this block you'll be thinking about ways that you can use an escrow to launch new decentralized applications. You'll be able to use all the code you wrote in a working web application!
+
+With a bit of creativity you can create something new and amazing. Start brainstorming! 🧠🎨
+State Variables
+We'll have three parties involved in the Escrow:
+
+1. 🙂 Depositor - The payer of the Escrow, makes the initial deposit that will eventually go to the beneficiary.
+2. 👨‍🔧 Beneficiary - The receiver of the funds. They will provide some service or good to the depositor before the funds are transferred by the arbiter.
+3. 👩‍⚖️ Arbiter - The approver of the transaction. They alone can move the funds when the goods/services have been provided.
+For this first stage, let's create these addresses as public storage variables!
+
+🏁 Your Goal: Addresses
+
+Create three public storage variables for the addresses of the depositor, beneficiary and arbiter.
+Solidity Arrays
+Working with arrays in Solidity can be tricky! 😖
+We'll need to understand the data location, or where the array is stored. 📍
+We'll also need to understand the memory allocation, whether it is fixed size or it can be dynamically resized. 🧠
+Fixed Arrays
+Fixed sized arrays have a set amount of values at compile-time.
+
+We can declare fixed size arrays in Solidity like so:
+
+1. uint[3] x = [1,2,3];
+2. address[1] y = [0xc783df8a850f42e7F7e57013759C285caa701eB6];
+3. bool[4] z = [true, true, false, false];
+
+☝️ These arrays have their size determined at compile-time. They cannot grow or shrink in size.
+📖 If you store less elements in the array than the fixed size, the rest of the elements will be the default value for the data type (i.e. false for bool and 0 for uint). 
+If you store more elements in the array than the fixed size, you'll get a compile-time TypeError!
+The above array declarations will work for state variables. Inside of a function, however, we will need to specify the data location of an array:
+
+1. uint[3] memory numbers = [1, 2, 3];
+☝️ The data location for this array is memory. Memory is temporary, it will only last as long as the transaction. The other data locations are calldata for referring to message call arguments and storage for persistence.
+
+🔍 Let's take a closer look at Data Location in details.
+Retrieve Elements 🔎
+We can also retrieve elements from our array with numerical indexes:
+
+1. uint[3] memory numbers = [1, 2, 3];
+
+2. console.log(numbers[0]); // 1
+3. console.log(numbers[1]); // 2
+For Loops 🌀
+For loops in Solidity have similar syntax as JavaScript and other C-family languages:
+
+1. for(uint i = 0; i < 10; i++) {
+2.   // run statement
+3. }
+Structs
+Structs provide Solidity Developers with a way to build custom data types. These data types can have multiple fields of data types we already have previously discussed.
+
+For example:
+
+1. struct Account {
+2.   uint balance;
+3.   bool isActive;
+4. }
+☝️ This struct is composed of a uint and a bool. If this struct were defined outside of a contract, it can be shared across multiple contracts like so:
+
+1. struct Account {
+2.   uint balance
+3.   bool isActive;
+4. }
+
+5. contract A {
+6.   Account owner;
+7.   Account recipient;
+8. }
+
+9. contract B {
+10.   mapping (address => Account) accounts;
+11. }
+
+Structs
+With structs we can create custom types in Solidity that are essentially groupings of variables.
+
+For instance:
+
+1. enum Directions { Up, Down, Left, Right }
+
+2. struct Hero {   
+3.   Directions facing;
+4.   uint health;
+5.   bool inAir;
+6. }
+☝️ With this struct we can create new heroes which contain just these three properties.
+
+We can create a new Hero by invoking the struct with parenthesis:
+
+1. Hero hero = Hero(Directions.Up, 100, true);
+Then we can use the . operator to retrieve values from the hero:
+
+1. console.log(hero.facing == Directions.Up); // true
+2. console.log(hero.health); // 100
+3. console.log(hero.inAir); // true
+🔍 Notice that the order of the parameters matters when creating a new struct, we could have also named the properties instead.
+Mappings
+Mappings are an important data type in Solidity. With a mapping we can take values of one data type and map them to values of another data type.
+
+Let's consider an example. Say you wanted to track balances of a bunch of addresses:
+
+address	balance
+0xc783df8a850f42e7F7e57013759C285caa701eB6	500
+0xeAD9C93b79Ae7C1591b1FB5323BD777E86e150d4	100
+0xE5904695748fe4A84b40b3fc79De2277660BD1D3	20
+Based on what we have learned so far you might be thinking of creating an array of structs:
+
+struct Account {
+    address addr;
+    uint balance;
+}
+
+Account[] accounts;
+☝️ This works, certainly. When we need to find an address balance we can iterate through the accounts to find the address we're looking for and retrieve the balance.
+
+However, there's a better way! We can use a mapping:
+
+mapping(address => uint) balances;
+☝️ With a mapping each address is mapped to a unique place in memory where it stores the uint balance. Looking up the balance is as simple as providing the address to the mapping: balances[addr].
+
+💡 Under the hood, the storage location is found by hashing the balances variable location with the address passed in. It's a simple lookup! Much more efficient than iteration. Generally it's better to try to use a mapping first and only use an array when you realize you need to iterate.
+
+Now that we see how mappings fit into the picture, let's learn how to build them! 🗺️
+Mapping
+Mappings allow you to store and retrieve elements quickly with a key. The key points to a location in memory where the value is stored.
+
+The key can be any basic data type in Solidity. It cannot be a reference data type like a struct or an array.
+
+The value, on the other hand, can be any Solidity type. It can be a struct, an array or even another mapping!
+
+Let's see an example of a mapping:
+import "forge-std/console.sol";
+contract Contract {
+    // create a score state variable 
+    // maps an address (key) to a uint (value)
+    mapping(address => uint) public score;
+
+    function addPoint() external {
+        // we're using msg.sender as the key 
+        // to look up the score in storage
+        console.log(score[msg.sender]); // 0
+
+        // we can also update that location in storage
+        score[msg.sender]++;
+        console.log(score[msg.sender]); // 1
+    }
+}
+☝️ The variable score takes an address and maps it to a uint. Each address will be mapped to its own unique uint value that it can retrieve and modify.
+
+The addPoint function uses the msg.sender as the key to update a location in memory. This location in memory for a value is initialized at zero. We can add to it using the msg.sender as the key, as shown above.
+
+💡 The score mapping is public which means that there will be a getter function created automatically. We can make a request to an Ethereum node invoking this getter function with an address and get a uint back.
