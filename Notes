@@ -37,3 +37,42 @@ We can make any regular function payable. This allows us to differentiate the pu
 Self Destruct
 Contracts can destroy themselves by using the SELFDESTRUCT opcode on the EVM! This opcode actually refunds ether in order to incentivize 
 cleaning up the blockchain of unused contracts.
+
+Reverting Transactions
+
+In the EVM the main opcode to revert a transaction is REVERT. There are three ways to invoke the REVERT opcode from Solidity are assert, 
+require and revert. We'll focus on the last two for now (see this stage's details section for more on assert).
+We can revert a transaction in Solidity by using the require function and the revert statement.
+A require statement has two forms:
+
+1. require(someBooleanCondition);
+2. require(someBooleanCondition, "Optional error message");
+☝️ These will revert if someBooleanCondition is false. We can use these to check for all kinds of conditions.
+
+The revert keyword also has two forms:
+1. // old syntax to revert with a string
+2. revert("Some error message");
+3. // new syntax to revert with a custom error
+4. revert SomeCustomError(arg1, arg2, ...);
+
+☝️ Notice that, either way, revert does not take a boolean condition. 
+Revert will always revert, so you will usually see it wrapped in a conditional statement:
+1. if(someCondition) {
+2.    revert SomeCustomError(arg1, arg2, ...);
+3. }
+Both revert and require use the REVERT opcode, they just provide different syntaxes to do so.
+The recommended approach is to use custom errors in most cases as they provide a gas-efficient way to identify and debug issues.
+⛽ A custom error, like a function, is identified by the first 4 bytes of the keccak256 hash of its canonical representation, which includes its name and parameter types.
+In contrast, using string literals for error messages can consume many more bytes, as we discussed in our lesson on string literals.
+
+Interfaces
+
+The easiest way to enable one contract to interact with another is by defining the target contract. Interfaces serve this purpose; for example:
+1. interface IToken {
+2.   function getBalance(address user) external;
+3. }
+☝️ We can use this interface to properly communicate with a token contract that implements the getBalance method:
+
+1. // tokenAddress: a contract adddress we want to communicate with
+2. // userAddress: the address we want to lookup the balance for
+3. uint balance = IToken(tokenAddress).getBalance(userAddress);
