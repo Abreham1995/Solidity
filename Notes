@@ -237,4 +237,62 @@ contract Contract {
 
 The addPoint function uses the msg.sender as the key to update a location in memory. This location in memory for a value is initialized at zero. We can add to it using the msg.sender as the key, as shown above.
 
-💡 The score mapping is public which means that there will be a getter function created automatically. We can make a request to an Ethereum node invoking this getter function with an address and get a uint back.
+💡 The score mapping is public which means that there will be a getter function created automatically. 
+We can make a request to an Ethereum node invoking this getter function with an address and get a uint back.
+
+Voting Contract
+In this tutorial we're going to build a voting contract! We'll use the lessons learned here to understand how the Governor standard emerged 🌐
+
+💭 Proposals
+We're going to focus on creating a voting contract that will allow members to create new proposals. This contract can contain many proposals which will be voted on by a group of members. Each proposal will keep track of its votes to decide when its time to execute.
+
+At execution time, these proposals will send calldata to a smart contract. 
+The calldata could be anything! We could have a Voting system that allows 100 members to decide when to upgrade a protocol.
+The calldata might target a function with the signature upgrade(address) and send over the new protocol implementation.
+That would be a very cool use of your Voting contract!
+
+Proposal Storage 📦
+In this stage we're going to focus on the storage of new proposals.
+
+A proposal should take in some calldata, and a target. 
+When the proposal passes the voting stage, the contract will send that calldata to the target. 
+To begin with, the yesCount and noCount should be zero until we record some votes!
+Contract Inheritance
+As with many object-oriented languages, Solidity includes inheritance as a feature.
+
+Inheritance means that you can create an object with some values/methods and use it as a base for other objects.
+In Solidity, the objects we're referring to are contracts and interfaces. 
+We can write a contract with state variables and functions. 
+Then we can create contracts that inherit those variables and functions. 
+These derived contracts can then choose to add behavior as necessary.
+
+This use case may seem quite similar to libraries! Just like libraries, code re-use is a big motivation for inheritance. 
+We'll take a look at why inheritance can be a more powerful feature than libraries. 
+Of course, that power comes with tradeoffs! With time and practice you'll be able to understand these tradeoffs and figure out which tool is right for the particular job at hand. 🛠️
+Inheritance
+Traditionally, inheritance is when one class copies (or inherits) functionality from another class.
+
+📖 Throughout this lesson you'll see the terms base and derived. Simply put, the derived class inherits from the base class.
+
+For Solidity, we'll be talking about inheritance for Contracts instead of Classes. However, the concept is the same!
+
+It's quite easy to inherit contracts in Solidity. Let's see an example:
+
+contract Base {
+	uint public value = 10;
+
+	function changeValue(uint _value) external {
+		value = _value;
+	}
+}
+
+contract Derived is Base {
+    // inherits everything from base contract!
+}
+☝️ In this example the Derived inherits both the value storage variable as well as the changeValue function!
+
+To setup the inheritance, all we need is the is keyword in the contract declaration, which specifies which contract to inherit from.
+
+📖 The body of the changeValue function is actually copied into the Derived functions bytecode, when inherited. 
+Then we can deploy Derived as a standalone contract with all of its inherited functionality baked in.
+
